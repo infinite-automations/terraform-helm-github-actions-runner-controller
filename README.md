@@ -1,5 +1,7 @@
 # terraform-helm-github-actions-runner-controller
 
+[![Test & Release](https://github.com/infinite-automations/terraform-helm-github-actions-runner-controller/actions/workflows/test-and-release.yml/badge.svg)](https://github.com/infinite-automations/terraform-helm-github-actions-runner-controller/actions/workflows/test-and-release.yml)
+
 Setup the GitHub Actions Runner Controller (ARC) in an existing kubernetes cluster.
 
 <!-- BEGIN_TF_DOCS -->
