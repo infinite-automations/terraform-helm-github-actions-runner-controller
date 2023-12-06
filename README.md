@@ -4,6 +4,8 @@
 
 Setup the GitHub Actions Runner Controller (ARC) in an existing kubernetes cluster.
 
+To create runner deployments see the [actions runner module](https://registry.terraform.io/modules/infinite-automations/github-actions-runner/kubectl/latest) from the [terraform-kubectl-github-actions-runner](https://github.com/infinite-automations/terraform-kubectl-github-actions-runner) repository.
+
 <!-- BEGIN_TF_DOCS -->
 
 
