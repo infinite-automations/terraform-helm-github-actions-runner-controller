@@ -20,7 +20,7 @@ resource "helm_release" "cert_manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   version    = "v1.12.3"
-  namespace  = kubernetes_namespace.cert_manager.metadata.0.name
+  namespace  = kubernetes_namespace.cert_manager.metadata[0].name
   atomic     = true
   timeout    = 600
   set {
@@ -34,7 +34,7 @@ resource "helm_release" "cert_manager" {
 
 ```hcl
 # setup actions-runner-controller
-module "actions-runner-controller" {
+module "actions_runner_controller" {
   source                                    = "../.."
   namespace                                 = "github-actions-runner-controller"
   create_namespace                          = true
@@ -61,24 +61,24 @@ module "actions-runner-controller" {
 resource "kubernetes_service_account" "runner" {
   metadata {
     name      = "test-runner"
-    namespace = module.actions-runner-controller.namespace
+    namespace = module.actions_runner_controller.namespace
   }
   secret {
-    name = kubernetes_secret.runner.metadata.0.name
+    name = kubernetes_secret.runner.metadata[0].name
   }
 }
 
 resource "kubernetes_secret" "runner" {
   metadata {
     name      = "test-runner"
-    namespace = module.actions-runner-controller.namespace
+    namespace = module.actions_runner_controller.namespace
   }
 }
 
 resource "kubernetes_role" "runner" {
   metadata {
     name      = "test-runner"
-    namespace = module.actions-runner-controller.namespace
+    namespace = module.actions_runner_controller.namespace
   }
 
   rule {
@@ -111,7 +111,7 @@ resource "kubernetes_role" "runner" {
 resource "kubernetes_role_binding" "runner" {
   metadata {
     name      = "test-runner"
-    namespace = module.actions-runner-controller.namespace
+    namespace = module.actions_runner_controller.namespace
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -121,7 +121,7 @@ resource "kubernetes_role_binding" "runner" {
   subject {
     kind      = "ServiceAccount"
     name      = "test-runner"
-    namespace = module.actions-runner-controller.namespace
+    namespace = module.actions_runner_controller.namespace
   }
 }
 
@@ -131,7 +131,7 @@ resource "kubectl_manifest" "runner" {
     kind       = "RunnerDeployment"
     metadata = {
       name      = "test-runner"
-      namespace = module.actions-runner-controller.namespace
+      namespace = module.actions_runner_controller.namespace
     }
     spec = {
       replicas = 2
@@ -139,7 +139,7 @@ resource "kubectl_manifest" "runner" {
         spec = {
           repository         = "infinite-automations/terraform-helm-github-actions-runner-controller"
           labels             = var.labels
-          serviceAccountName = kubernetes_service_account.runner.metadata.0.name
+          serviceAccountName = kubernetes_service_account.runner.metadata[0].name
           containerMode      = "kubernetes"
           workVolumeClaimTemplate = {
             storageClassName = "standard"
@@ -157,7 +157,7 @@ resource "kubectl_manifest" "runner" {
     }
   })
   depends_on = [
-    module.actions-runner-controller,
+    module.actions_runner_controller,
     kubernetes_service_account.runner
   ]
 }
